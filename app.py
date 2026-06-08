@@ -56,11 +56,9 @@ def home():
 
  if request.method == "POST":
 
-    user_skills = request.form["skills"].lower().split(",")
+    user_skills = request.form["skills"].strip().lower().split(",")
 
-    target_role = request.form["role"].lower()
-
-    user_skills = [skill.strip() for skill in user_skills]
+    target_role = request.form["role"].strip().lower()
 
     required_skills = roles.get(target_role, [])
 
