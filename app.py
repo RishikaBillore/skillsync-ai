@@ -52,43 +52,44 @@ roles = {
 @app.route("/", methods=["GET", "POST"])
 def home():
 
- result = ""
+    result = ""
 
- if request.method == "POST":
+    if request.method == "POST":
 
-    user_skills = request.form["skills"].strip().lower().split(",")
+        user_skills = request.form["skills"].strip().lower().split(",")
+        user_skills = [skill.strip() for skill in user_skills]
 
-    target_role = request.form["role"].strip().lower()
+        target_role = request.form["role"].strip().lower()
 
-    required_skills = roles.get(target_role, [])
+        required_skills = roles.get(target_role, [])
 
-    if not required_skills:
+        if not required_skills:
 
-        result = """
-        <h2>Role not found!</h2>
-        <p>Please enter a valid role.</p>
-        """
+            result = """
+            <h2>Role not found!</h2>
+            <p>Please enter a valid role.</p>
+            """
 
-    else:
+        else:
 
-    missing_skills = [skill for skill in required_skills if skill not in user_skills]
+            missing_skills = [skill for skill in required_skills if skill not in user_skills]
 
-    result = "<h2>Skill Gap Analysis</h2>"
+            result = "<h2>Skill Gap Analysis</h2>"
 
-    if missing_skills:
+            if missing_skills:
 
-        result += "<h3>Missing Skills:</h3>"
+                result += "<h3>Missing Skills:</h3>"
 
-        for skill in missing_skills:
-            result += f"<p>• {skill.title()}</p>"
+                for skill in missing_skills:
+                    result += f"<p>• {skill.title()}</p>"
 
-    else:
+            else:
 
-        result += """
-        <h3>You already have all required skills!</h3>
-        """
+                result += """
+                <h3>You already have all required skills!</h3>
+                """
 
- return f"""
+    return f"""
 
 <html>
 
