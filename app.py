@@ -3,17 +3,16 @@ from flask import Flask, request
 app = Flask(name)
 
 roles = {
-
 "backend developer": [
-    "java",
-    "spring boot",
-    "sql",
-    "jwt",
-    "rest api",
-    "redis",
-    "microservices",
-    "docker",
-    "git"
+"java",
+"spring boot",
+"sql",
+"jwt",
+"rest api",
+"redis",
+"microservices",
+"docker",
+"git"
 ],
 
 "frontend developer": [
@@ -46,84 +45,6 @@ roles = {
     "power bi",
     "statistics",
     "tableau"
-],
-
-"data scientist": [
-    "python",
-    "machine learning",
-    "deep learning",
-    "tensorflow",
-    "pandas",
-    "numpy",
-    "statistics"
-],
-
-"machine learning engineer": [
-    "python",
-    "machine learning",
-    "tensorflow",
-    "pytorch",
-    "feature engineering",
-    "model deployment",
-    "docker",
-    "sql"
-],
-
-"android developer": [
-    "java",
-    "kotlin",
-    "android studio",
-    "firebase",
-    "xml",
-    "rest api"
-],
-
-"devops engineer": [
-    "linux",
-    "docker",
-    "kubernetes",
-    "jenkins",
-    "aws",
-    "terraform",
-    "git",
-    "ci/cd"
-],
-
-"cybersecurity analyst": [
-    "network security",
-    "ethical hacking",
-    "linux",
-    "cryptography",
-    "wireshark",
-    "penetration testing",
-    "python"
-],
-
-"ui ux designer": [
-    "figma",
-    "wireframing",
-    "prototyping",
-    "user research",
-    "design systems"
-],
-
-"cloud engineer": [
-    "aws",
-    "azure",
-    "google cloud",
-    "docker",
-    "kubernetes",
-    "linux",
-    "terraform"
-],
-
-"blockchain developer": [
-    "solidity",
-    "ethereum",
-    "smart contracts",
-    "web3",
-    "javascript",
-    "cryptography"
 ]
 
 }
@@ -131,9 +52,9 @@ roles = {
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-result = ""
+ result = ""
 
-if request.method == "POST":
+ if request.method == "POST":
 
     user_skills = request.form["skills"].lower().split(",")
 
@@ -169,6 +90,103 @@ if request.method == "POST":
                 result += f"<p>• {skill.title()}</p>"
 
         else:
+
+            result += """
+            <h3>You already have all required skills!</h3>
+            """
+
+ return f"""
+
+<html>
+
+<head>
+
+    <title>SkillSync AI</title>
+
+    <style>
+
+        body {{
+            font-family: Arial;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }}
+
+        .container {{
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0px 0px 10px gray;
+        }}
+
+        input {{
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }}
+
+        button {{
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }}
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>SkillSync AI</h1>
+
+        <p>Analyze your skill gaps for different tech roles.</p>
+
+        <form method="POST">
+
+            <label>Enter Your Skills:</label>
+
+            <input
+                type="text"
+                name="skills"
+                placeholder="Example: Java, SQL, REST API"
+                required
+            >
+
+            <label>Enter Target Role:</label>
+
+            <input
+                type="text"
+                name="role"
+                placeholder="Example: Backend Developer"
+                required
+            >
+
+            <button type="submit">
+                Analyze Skills
+            </button>
+
+        </form>
+
+        <br>
+
+        {result}
+
+    </div>
+
+</body>
+
+</html>
+
+"""
+
+if name == "main":
+app.run(host="0.0.0.0", port=5000)        else:
 
             result += """
             <h3>You already have all required skills!</h3>
