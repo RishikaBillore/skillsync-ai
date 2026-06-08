@@ -185,14 +185,15 @@ def home():
 
 """
 
-if name == "main":
-app.run(host="0.0.0.0", port=5000)        else:
+ if name == "main":
+  app.run(host="0.0.0.0", port=5000)       
+ else:
 
             result += """
             <h3>You already have all required skills!</h3>
             """
 
-return f"""
+ return f"""
 
 <html>
 
