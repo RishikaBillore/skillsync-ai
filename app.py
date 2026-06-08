@@ -71,15 +71,9 @@ def home():
 
     else:
 
-        missing_skills = []
-
-        for skill in required_skills:
-
-            if skill not in user_skills:
-                missing_skills.append(skill)
-
-        result += "<h2>Skill Gap Analysis</h2>"
-
+     missing_skills = [skill for skill in required_skills if skill not in user_skills]
+ 
+     result = "<h2>Skill Gap Analysis</h2>"
         if missing_skills:
 
             result += "<h3>Missing Skills:</h3>"
