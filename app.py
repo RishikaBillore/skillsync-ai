@@ -71,21 +71,22 @@ def home():
 
     else:
 
-     missing_skills = [skill for skill in required_skills if skill not in user_skills]
- 
-     result = "<h2>Skill Gap Analysis</h2>"
-        if missing_skills:
+    missing_skills = [skill for skill in required_skills if skill not in user_skills]
 
-            result += "<h3>Missing Skills:</h3>"
+    result = "<h2>Skill Gap Analysis</h2>"
 
-            for skill in missing_skills:
-                result += f"<p>• {skill.title()}</p>"
+    if missing_skills:
 
-        else:
+        result += "<h3>Missing Skills:</h3>"
 
-            result += """
-            <h3>You already have all required skills!</h3>
-            """
+        for skill in missing_skills:
+            result += f"<p>• {skill.title()}</p>"
+
+    else:
+
+        result += """
+        <h3>You already have all required skills!</h3>
+        """
 
  return f"""
 
