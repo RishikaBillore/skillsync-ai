@@ -3,278 +3,169 @@ from flask import Flask, request
 app = Flask(__name__)
 
 roles = {
-"backend developer": [
-"java",
-"spring boot",
-"sql",
-"jwt",
-"rest api",
-"redis",
-"microservices",
-"docker",
-"git"
-],
+    "backend developer": [
+        "java", "spring boot", "sql", "jwt", "rest api",
+        "redis", "microservices", "docker", "git", "system design"
+    ],
 
-"frontend developer": [
-    "html",
-    "css",
-    "javascript",
-    "react",
-    "tailwind css",
-    "redux",
-    "git",
-    "responsive design"
-],
+    "frontend developer": [
+        "html", "css", "javascript", "react",
+        "tailwind css", "redux", "git", "responsive design",
+        "typescript"
+    ],
 
-"full stack developer": [
-    "html",
-    "css",
-    "javascript",
-    "react",
-    "node js",
-    "express js",
-    "mongodb",
-    "sql",
-    "git"
-],
+    "full stack developer": [
+        "html", "css", "javascript", "react",
+        "node js", "express js", "mongodb", "sql",
+        "git", "rest api", "authentication"
+    ],
 
-"data analyst": [
-    "python",
-    "excel",
-    "sql",
-    "power bi",
-    "statistics",
-    "tableau"
-]
+    "data analyst": [
+        "python", "excel", "sql", "power bi",
+        "statistics", "tableau", "data visualization",
+        "pandas"
+    ],
 
+    "data scientist": [
+        "python", "statistics", "machine learning",
+        "pandas", "numpy", "scikit learn",
+        "data cleaning", "feature engineering"
+    ],
+
+    "devops engineer": [
+        "linux", "docker", "kubernetes", "jenkins",
+        "aws", "ci/cd", "git", "terraform",
+        "monitoring"
+    ],
+
+    "android developer": [
+        "java", "kotlin", "android studio",
+        "xml", "firebase", "rest api",
+        "git"
+    ],
+
+    "ios developer": [
+        "swift", "xcode", "ios sdk",
+        "swiftui", "rest api", "git"
+    ],
+
+    "machine learning engineer": [
+        "python", "machine learning", "deep learning",
+        "tensorflow", "pytorch", "numpy",
+        "pandas", "model deployment"
+    ],
+
+    "cybersecurity analyst": [
+        "networking", "linux", "penetration testing",
+        "cryptography", "firewalls", "security tools",
+        "risk analysis"
+    ]
 }
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-
     result = ""
 
     if request.method == "POST":
 
-        user_skills = request.form["skills"].strip().lower().split(",")
-        user_skills = [skill.strip() for skill in user_skills]
+        # input cleaning (VERY IMPORTANT FIX)
+        user_skills = request.form["skills"].lower()
+        user_skills = [skill.strip() for skill in user_skills.split(",")]
 
-        target_role = request.form["role"].strip().lower()
+        target_role = request.form["role"].lower().strip()
 
         required_skills = roles.get(target_role, [])
 
         if not required_skills:
-
             result = """
-            <h2>Role not found!</h2>
-            <p>Please enter a valid role.</p>
+            <h2>❌ Role not found!</h2>
+            <p>Please enter a valid role from the list.</p>
             """
 
         else:
+            missing_skills = [
+                skill for skill in required_skills
+                if skill not in user_skills
+            ]
 
-            missing_skills = [skill for skill in required_skills if skill not in user_skills]
-
-            result = "<h2>Skill Gap Analysis</h2>"
+            result = "<h2>📊 Skill Gap Analysis</h2>"
 
             if missing_skills:
-
-                result += "<h3>Missing Skills:</h3>"
-
+                result += "<h3>❌ Missing Skills:</h3>"
                 for skill in missing_skills:
                     result += f"<p>• {skill.title()}</p>"
-
             else:
-
-                result += """
-                <h3>You already have all required skills!</h3>
-                """
+                result += "<h3>🎉 You already have all required skills!</h3>"
 
     return f"""
+    <html>
+    <head>
+        <title>SkillSync AI</title>
+        <style>
+            body {{
+                font-family: Arial;
+                background-color: #f4f4f4;
+                padding: 40px;
+            }}
 
-<html>
+            .container {{
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                max-width: 550px;
+                margin: auto;
+                box-shadow: 0px 0px 10px gray;
+            }}
 
-<head>
+            input {{
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }}
 
-    <title>SkillSync AI</title>
+            button {{
+                padding: 10px 20px;
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }}
 
-    <style>
+            button:hover {{
+                background-color: #333;
+            }}
 
-        body {{
-            font-family: Arial;
-            background-color: #f4f4f4;
-            padding: 40px;
-        }}
+        </style>
+    </head>
 
-        .container {{
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0px 0px 10px gray;
-        }}
+    <body>
+        <div class="container">
+            <h1>SkillSync AI 🚀</h1>
+            <p>Analyze your skill gaps for tech roles.</p>
 
-        input {{
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }}
+            <form method="POST">
 
-        button {{
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }}
+                <label>Your Skills:</label>
+                <input type="text" name="skills"
+                    placeholder="Java, SQL, REST API" required>
 
-    </style>
+                <label>Target Role:</label>
+                <input type="text" name="role"
+                    placeholder="backend developer" required>
 
-</head>
+                <button type="submit">Analyze</button>
+            </form>
 
-<body>
+            <br>
+            {result}
+        </div>
+    </body>
+    </html>
+    """
 
-    <div class="container">
 
-        <h1>SkillSync AI</h1>
-
-        <p>Analyze your skill gaps for different tech roles.</p>
-
-        <form method="POST">
-
-            <label>Enter Your Skills:</label>
-
-            <input
-                type="text"
-                name="skills"
-                placeholder="Example: Java, SQL, REST API"
-                required
-            >
-
-            <label>Enter Target Role:</label>
-
-            <input
-                type="text"
-                name="role"
-                placeholder="Example: Backend Developer"
-                required
-            >
-
-            <button type="submit">
-                Analyze Skills
-            </button>
-
-        </form>
-
-        <br>
-
-        {result}
-
-    </div>
-
-</body>
-
-</html>
-
-"""
-
- if name == "main":
-  app.run(host="0.0.0.0", port=5000)       
- else:
-
-            result += """
-            <h3>You already have all required skills!</h3>
-            """
-
- return f"""
-
-<html>
-
-<head>
-
-    <title>SkillSync AI</title>
-
-    <style>
-
-        body {{
-            font-family: Arial;
-            background-color: #f4f4f4;
-            padding: 40px;
-        }}
-
-        .container {{
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0px 0px 10px gray;
-        }}
-
-        input {{
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }}
-
-        button {{
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }}
-
-    </style>
-
-</head>
-
-<body>
-
-    <div class="container">
-
-        <h1>SkillSync AI</h1>
-
-        <p>Analyze your skill gaps for different tech roles.</p>
-
-        <form method="POST">
-
-            <label>Enter Your Skills:</label>
-
-            <input
-                type="text"
-                name="skills"
-                placeholder="Example: Java, SQL, REST API"
-                required
-            >
-
-            <label>Enter Target Role:</label>
-
-            <input
-                type="text"
-                name="role"
-                placeholder="Example: Backend Developer"
-                required
-            >
-
-            <button type="submit">
-                Analyze Skills
-            </button>
-
-        </form>
-
-        <br>
-
-        {result}
-
-    </div>
-
-</body>
-
-</html>
-
-"""
-
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
